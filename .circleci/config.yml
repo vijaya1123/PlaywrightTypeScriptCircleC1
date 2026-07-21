@@ -1,16 +1,16 @@
 version: 2.1
 jobs:
   run-test:
-    docker:
-      - image: mcr.microsoft.com/playwright:v1.27.1-focal
+      docker:
+      - image: circleci/node:18
+      
     # Steps to the job
-    steps:
+   steps:
       - checkout
-      - run:
-          name: Download dependency
-          environment:
-            SECRET_KEY: SECRET_KEY 
-          command: npm ci
+      - run: npm ci
+  test:
+    docker:
+      - image: circleci/node:18-browsers
       - run:
           name: Run tests
           command: npm run test:master
