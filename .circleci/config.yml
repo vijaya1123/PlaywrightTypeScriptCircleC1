@@ -1,21 +1,25 @@
 version: 2.1
+
+orbs:
+  node: circleci/node@5.0.2
+
 jobs:
-  run-test:
-      docker:
-      - image: circleci/node:18
-      
-    # Steps to the job
-   steps:
-      - checkout
-      - run: npm ci
   test:
     docker:
-      - image: circleci/node:18-browsers
+      - image: mcr.microsoft.com/playwright:v1.45.0-jammy
+    steps:
+      - checkout
       - run:
-          name: Run tests
-          command: npm run test:master
-# Invoke jobs via workflows
+          name: Install dependencies
+          command: npm ci
+      - run:
+          name: Install Playwright browsers
+          command: npx playwright install --with-deps
+      - run:
+          name: Run Playwright tests
+          command: npm run test
+
 workflows:
-  run-test-workflow:
+  run-tests:
     jobs:
-      - run-test
+      - test
