@@ -17,7 +17,7 @@ jobs:
           command: npx playwright install --with-deps
       - run:
           name: Run Playwright tests
-          command: npm run test
+          command: npm run test:master
 
 workflows:
   run-tests:
