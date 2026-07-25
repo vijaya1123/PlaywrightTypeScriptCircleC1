@@ -4,7 +4,6 @@ orbs:
   node: circleci/node@5.0.2
 
 jobs:
-
   test:
     docker:
       - image: mcr.microsoft.com/playwright:v1.45.0-jammy
