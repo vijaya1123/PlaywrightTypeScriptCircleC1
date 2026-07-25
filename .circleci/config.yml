@@ -3,7 +3,7 @@ version: 2.1
 executors:
   node-executor:
     docker:
-      - image: cimg/node:21  # Node.js with npm/yarn
+      - image: cimg/node:20 # Node.js with npm/yarn
     working_directory: ~/project
 
 jobs:
