@@ -1,50 +1,25 @@
 version: 2.1
 
-executors:
-  node-executor:
-    docker:
-      - image: cimg/node:20 # Node.js with npm/yarn
-    working_directory: ~/project
+orbs:
+  node: circleci/node@5.0.2
 
 jobs:
-  install-deps:
-    executor: node-executor
+  test:
+    docker:
+      - image: mcr.microsoft.com/playwright:v1.45.0-jammy
     steps:
       - checkout
       - run:
           name: Install dependencies
-          command: |
-            npm ci
-            npx playwright install --with-deps
-
-  run-tests:
-    executor: node-executor
-    steps:
-      - checkout
+          command: npm ci
       - run:
-          name: Install dependencies
-          command: |
-            npm ci
-            npx playwright install --with-deps
+          name: Install Playwright browsers
+          command: npx playwright install --with-deps
       - run:
-          name: Run Playwright tests with Allure reporter
-          command: |
-            npm run test:master --reporter=line,allure-playwright
-      - run:
-          name: Generate Allure HTML report
-          command: |
-            npx allure generate ./allure-results --clean -o ./allure-report
-      - store_artifacts:
-          path: ./allure-report
-          destination: allure-report
-      - store_test_results:
-          path: ./allure-results
+          name: Run Playwright tests
+          command: npm run test:master
 
 workflows:
-  version: 2
-  test-and-report:
+  run-tests:
     jobs:
-      - install-deps
-      - run-tests:
-          requires:
-            - install-deps
+      - test
